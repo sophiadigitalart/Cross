@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<textures version="1.0">
+  <texture id="1" texturetype="imagesequence">
+    <details path="c" width="1280" height="720" flipv="0"/>
+  </texture>
+  <texture id="2" texturetype="image">
+    <details path="0.jpg" width="640" height="480" flipv="0"/>
+  </texture>
+</textures>
+
