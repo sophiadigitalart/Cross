@@ -307,14 +307,13 @@ void CrossApp::draw()
 			}
 			else {
 				warp->draw(mImage, mSrcArea);
-
-			}
-			
+			}			
 		}
 	}
 
 	// Spout Send
-	mSpoutOut.sendViewport();
+	//mSpoutOut.sendViewport();
+	mSpoutOut.sendTexture(mFbo->getColorTexture());
 	if (mVDSession->showUI()) {
 		mVDUI->Run("UI", (int)getAverageFps());
 		if (mVDUI->isReady()) {
