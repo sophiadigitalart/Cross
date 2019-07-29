@@ -122,7 +122,7 @@ CrossApp::CrossApp()
 	//format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
 	mFbo = gl::Fbo::create(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, format.depthTexture());
 	// shader
-	mUseShader = false;
+	mUseShader = true;
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
 
 }
@@ -172,12 +172,10 @@ void CrossApp::renderToFbo()
 	gl::ScopedGlslProg prog(mGlsl);
 
 	mGlsl->uniform("iTime", (float)getElapsedSeconds());
-	mGlsl->uniform("iResolution", vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
+	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
-	mGlsl->uniform("iExposure", 1.0f);
-	mGlsl->uniform("iSobel", 1.0f);
-	mGlsl->uniform("iChromatic", 1.0f);
-
+	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
+	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
 	//gl::drawSolidRect(getWindowBounds());
 	gl::drawSolidRect(Rectf(0, 0, mVDSettings->mRenderWidth, mVDSettings->mRenderHeight));
 }
@@ -211,7 +209,8 @@ void CrossApp::mouseMove(MouseEvent event)
 {
 	if (!Warp::handleMouseMove(mWarps, event)) {
 		if (!mVDSession->handleMouseMove(event)) {
-			// let your application perform its mouseMove handling here
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, (float)event.getPos().x / (float)mVDSettings->mRenderWidth);
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, (float)event.getPos().y / (float)mVDSettings->mRenderHeight);
 		}
 	}
 }
@@ -219,9 +218,7 @@ void CrossApp::mouseDown(MouseEvent event)
 {
 	if (!Warp::handleMouseDown(mWarps, event)) {
 		if (!mVDSession->handleMouseDown(event)) {
-			// let your application perform its mouseDown handling here
-			if (event.isRightDown()) {
-			}
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 1.0f);
 		}
 	}
 }
@@ -237,7 +234,7 @@ void CrossApp::mouseUp(MouseEvent event)
 {
 	if (!Warp::handleMouseUp(mWarps, event)) {
 		if (!mVDSession->handleMouseUp(event)) {
-			// let your application perform its mouseUp handling here
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 0.0f);
 		}
 	}
 }
