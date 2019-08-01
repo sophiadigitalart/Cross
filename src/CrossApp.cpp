@@ -124,7 +124,11 @@ CrossApp::CrossApp()
 	// shader
 	mUseShader = true;
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
-
+	mVDSession->setBpm(160.0f);
+	//mVDSession->setSpeed(1, 0.006f);
+	mVDSession->setSpeed(1, 0.0f);
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710);
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648);
 }
 void CrossApp::resizeWindow()
 {
@@ -174,6 +178,7 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iTime", (float)getElapsedSeconds());
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
+	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
 	//gl::drawSolidRect(getWindowBounds());
@@ -209,8 +214,7 @@ void CrossApp::mouseMove(MouseEvent event)
 {
 	if (!Warp::handleMouseMove(mWarps, event)) {
 		if (!mVDSession->handleMouseMove(event)) {
-			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, (float)event.getPos().x / (float)mVDSettings->mRenderWidth);
-			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, (float)event.getPos().y / (float)mVDSettings->mRenderHeight);
+			
 		}
 	}
 }
@@ -226,7 +230,9 @@ void CrossApp::mouseDrag(MouseEvent event)
 {
 	if (!Warp::handleMouseDrag(mWarps, event)) {
 		if (!mVDSession->handleMouseDrag(event)) {
-			// let your application perform its mouseDrag handling here
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, (float)event.getPos().x / (float)mVDSettings->mRenderWidth);
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, (float)event.getPos().y / (float)mVDSettings->mRenderHeight);
+			
 		}
 	}
 }
@@ -235,6 +241,8 @@ void CrossApp::mouseUp(MouseEvent event)
 	if (!Warp::handleMouseUp(mWarps, event)) {
 		if (!mVDSession->handleMouseUp(event)) {
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 0.0f);
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710);
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648);
 		}
 	}
 }
