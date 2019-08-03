@@ -12,10 +12,10 @@
 					<gamma red="1" green="1" blue="1"/>
 					<luminance red="0.5" green="0.5" blue="0.5"/>
 				</blend>
-				<corner x="0.0015625" y="0"/>
-				<corner x="1.99063" y="-0.00208333"/>
-				<corner x="1.99688" y="1.49167"/>
-				<corner x="0.0046875" y="1.4875"/>
+				<corner x="0" y="0"/>
+				<corner x="1" y="0"/>
+				<corner x="1" y="1"/>
+				<corner x="0" y="1"/>
 			</warp>
 		</map>
 	</profile>

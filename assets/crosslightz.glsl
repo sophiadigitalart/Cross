@@ -1,7 +1,7 @@
 
 uniform vec3      	iResolution; 			// viewport resolution (in pixels)
-uniform float     	iTime; 			// shader playback time (in seconds)
-uniform float     	iBpm; 			// shader playback time (in seconds)
+uniform float     	iTime; 					// shader playback time (in seconds)
+uniform float     	iElapsed; 			// shader playback time delta (in seconds)
 uniform vec4      	iMouse; 				// mouse pixel coords. xy: current (if MLB down), zw: click
 uniform sampler2D 	iChannel0; 				// input channel 0
 
@@ -33,7 +33,8 @@ vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
         vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
 
         sampl *= illuminationDecay * weight;
-        color += sampl* (sin(iTime * iBpm * 0.01) + 0.1);
+        //color += sampl * (sin(iTime) + 0.1);
+        color += sampl* (sin(iElapsed) + 0.1);
         illuminationDecay *= decay;
     }
     

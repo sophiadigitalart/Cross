@@ -179,7 +179,7 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iTime", (float)getElapsedSeconds());
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
-	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
+	mGlsl->uniform("iElapsed", mVDSession->getFloatUniformValueByIndex(mVDSettings->IELAPSED));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
 	gl::drawSolidRect(Rectf(0, 0, mVDSettings->mRenderWidth, mVDSettings->mRenderHeight));
@@ -189,10 +189,11 @@ void CrossApp::update()
 
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IFPS, getAverageFps());
 	mVDSession->update();
+	
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		//CI_LOG_V("getPosition " + toString(mVDSession->getPosition(mSeqIndex)) +" getMaxFrame " + toString(mVDSession->getMaxFrame(mSeqIndex)));
-		
+		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IELAPSED, 0.0f);
 
 		if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
