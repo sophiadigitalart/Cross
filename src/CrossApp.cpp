@@ -52,7 +52,7 @@ private:
 	// Log
 	VDLogRef						mVDLog;
 	// UI
-	VDUIRef						mVDUI;
+	VDUIRef							mVDUI;
 	// handle resizing for imgui
 	void							resizeWindow();
 	//! fbos
@@ -73,6 +73,8 @@ private:
 	gl::TextureRef					mImage;
 	WarpList						mWarps;
 	Area							mSrcArea;
+	int								mLastBar = 0;
+	int								mSeqIndex = 1;
 };
 
 
@@ -83,7 +85,7 @@ CrossApp::CrossApp()
 	mVDSettings = VDSettings::create("Cross");
 	// Session
 	mVDSession = VDSession::create(mVDSettings);
-	mVDSession->setMode(1); // crosses
+	mVDSession->setSpeed(0, 0.0f);
 	//mVDSettings->mCursorVisible = true;
 	toggleCursorVisibility(mVDSettings->mCursorVisible);
 	mVDSession->getWindowsResolution();
@@ -125,8 +127,7 @@ CrossApp::CrossApp()
 	mUseShader = true;
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
 	mVDSession->setBpm(160.0f);
-	//mVDSession->setSpeed(1, 0.006f);
-	mVDSession->setSpeed(1, 0.0f);
+	mVDSession->setSpeed(mSeqIndex, 0.0f);
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710);
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648);
 }
@@ -181,14 +182,28 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
-	//gl::drawSolidRect(getWindowBounds());
 	gl::drawSolidRect(Rectf(0, 0, mVDSettings->mRenderWidth, mVDSettings->mRenderHeight));
 }
 void CrossApp::update()
 {
+
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IFPS, getAverageFps());
 	mVDSession->update();
-	mImage = mVDSession->getInputTexture(mVDSession->getMode());
+	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
+		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
+		//CI_LOG_V("getPosition " + toString(mVDSession->getPosition(mSeqIndex)) +" getMaxFrame " + toString(mVDSession->getMaxFrame(mSeqIndex)));
+		
+
+		if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
+			mVDSession->setPlayheadPosition(mSeqIndex, 0);
+		}
+		else {
+			mVDSession->incrementSequencePosition();
+		}
+
+
+	}
+	mImage = mVDSession->getInputTexture(mSeqIndex);
 	mSrcArea = mImage->getBounds();
 	if (mUseShader) {
 		renderToFbo();
@@ -307,7 +322,7 @@ void CrossApp::draw()
 		}
 	}
 
-	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), false); // must match windowSize
+	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), false); 
 	if (mImage) {
 		for (auto &warp : mWarps) {
 			if (mUseShader) {
@@ -333,6 +348,11 @@ void CrossApp::draw()
 void prepareSettings(App::Settings *settings)
 {
 	settings->setWindowSize(1280, 720);
+#ifdef _DEBUG
+	//settings->setConsoleWindowEnabled();
+#else
+	//settings->setConsoleWindowEnabled();
+#endif  // _DEBUG
 }
 
 CINDER_APP(CrossApp, RendererGl, prepareSettings)

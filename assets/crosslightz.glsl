@@ -12,9 +12,7 @@ vec2  fragCoord = gl_FragCoord.xy; // keep the 2 spaces between vec2 and fragCoo
 // https://www.shadertoy.com/view/ls2Xzd
 // Algorithm found in https://medium.com/community-play-3d/god-rays-whats-that-5a67f26aeac2
 vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
-    /*float decay = 0.92;
-    float density = 1.0;
-    float weight = 0.58767; */
+
     float decay = 0.98;
     float density = 1.0;
     float weight = 0.58767;
@@ -35,7 +33,7 @@ vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
         vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
 
         sampl *= illuminationDecay * weight;
-        color += sampl* (sin(iTime) + 0.1);
+        color += sampl* (sin(iTime * iBpm * 0.01) + 0.1);
         illuminationDecay *= decay;
     }
     
@@ -58,20 +56,5 @@ void main( void ){
 	pos.x *= iResolution.x/iResolution.y; //fix aspect ratio
 	
 	fragColor = crepuscular_rays(uv, pos.xy);
-	/*vec2 uv = fragCoord.xy / iResolution.xy;
-    vec4 aa = texture(iChannel0,uv);
-    //vec2 raysource =vec2(sin(iTime*0.5)*0.25+0.35,0.89);
-    vec2 raysource =vec2(sin(iTime*0.5)*0.25+iMouse.x,iMouse.y);
-    float rayamount = 0.0f;
-    for(float i = 0.; i < 1.0;i+=0.01){
-        if(length(texture(iChannel0,mix(uv,raysource,i)))>1.9){
-            
-        rayamount += 0.03/pow(distance(mix(uv,raysource,i),raysource)+1.0,2.0);
-        }
-    }
-    aa+=rayamount;
-//    if(length(aa)>1.9){
-//            aa.xyz = vec3(1.0/(distance(uv,raysource)+1.0));
-//           }
-    fragColor = vec4(rayamount) +aa; */
+	
 }
