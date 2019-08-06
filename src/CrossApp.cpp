@@ -89,7 +89,7 @@ CrossApp::CrossApp()
 	//mVDSettings->mCursorVisible = true;
 	toggleCursorVisibility(mVDSettings->mCursorVisible);
 	mVDSession->getWindowsResolution();
-
+	mVDSession->toggleUI();
 	mFadeInDelay = true;
 	// UI
 	mVDUI = VDUI::create(mVDSettings, mVDSession);
@@ -176,9 +176,10 @@ void CrossApp::renderToFbo()
 	mImage->bind(0);
 	gl::ScopedGlslProg prog(mGlsl);
 
-	mGlsl->uniform("iTime", (float)getElapsedSeconds());
+	mGlsl->uniform("iTime", mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME));;
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
+	mGlsl->uniform("iStart", mVDSettings->iStart);
 	mGlsl->uniform("iElapsed", mVDSession->getFloatUniformValueByIndex(mVDSettings->IELAPSED));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));

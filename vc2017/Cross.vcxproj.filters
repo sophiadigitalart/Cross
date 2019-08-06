@@ -93,6 +93,9 @@
     <Filter Include="debug">
       <UniqueIdentifier>{cd8a25e0-d311-4b32-a7e0-82ae00506c28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="release">
+      <UniqueIdentifier>{51c4af2f-a460-4129-b6e8-33402f916d81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CrossApp.cpp">
@@ -399,6 +402,9 @@
     </Xml>
     <Xml Include="build\Win32\Debug\VDCross.xml">
       <Filter>debug</Filter>
+    </Xml>
+    <Xml Include="build\Win32\Release\VDCross.xml">
+      <Filter>release</Filter>
     </Xml>
   </ItemGroup>
 </Project>

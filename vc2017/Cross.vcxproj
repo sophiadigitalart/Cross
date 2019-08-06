@@ -213,6 +213,7 @@
   <ItemGroup>
     <Xml Include="..\assets\textures.xml" />
     <Xml Include="build\Win32\Debug\VDCross.xml" />
+    <Xml Include="build\Win32\Release\VDCross.xml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h" />
