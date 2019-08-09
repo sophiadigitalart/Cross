@@ -181,6 +181,7 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iChannel0", 0); // texture 0
 	mGlsl->uniform("iStart", mVDSettings->iStart);
 	mGlsl->uniform("iElapsed", mVDSession->getFloatUniformValueByIndex(mVDSettings->IELAPSED));
+	mGlsl->uniform("iExposure", mVDSession->getFloatUniformValueByIndex(mVDSettings->IEXPOSURE));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
 	gl::drawSolidRect(Rectf(0, 0, mVDSettings->mRenderWidth, mVDSettings->mRenderHeight));
@@ -197,9 +198,11 @@ void CrossApp::update()
 		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IELAPSED, 0.0f);
 
 		if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
+			// 20190808 
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
 		}
 		else {
+			// 20190808 
 			mVDSession->incrementSequencePosition();
 		}
 

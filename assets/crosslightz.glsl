@@ -2,6 +2,7 @@
 uniform vec3      	iResolution; 			// viewport resolution (in pixels)
 uniform float     	iTime; 					// shader playback time (in seconds)
 uniform float     	iElapsed; 				// shader playback time delta (in seconds)
+uniform float     	iExposure; 				// exposure
 uniform float     	iStart;					// start adjustment
 uniform vec4      	iMouse; 				// mouse pixel coords. xy: current (if MLB down), zw: click
 uniform sampler2D 	iChannel0; 				// input channel 0
@@ -41,8 +42,8 @@ vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
         vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
 
         sampl *= illuminationDecay * weight;
-        color += sampl * (sin(iTime*16.0) + iStart);
-        //color += sampl* (sin(iElapsed) + 0.1);
+        color += sampl * (sin(iTime*16.0 + iStart) + iExposure - 1.0);
+        //color += sampl* (sin(iTime) + 1.0);
         illuminationDecay *= decay;
     }
     
@@ -191,9 +192,11 @@ void main( void ){
 	//}
 	pos.x *= iResolution.x/iResolution.y; //fix aspect ratio
 	   // Multiples of 4x5 work best
-    /*vec2 vFontSize = vec2(8.0, 15.0);
+    vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);
 	vec4 vColour = vec4(0.7);
-	vColour = mix( vColour, vec4(1.0, 1.0, 1.0, 0.0), PrintValue(fragCoord, vec2(10.0, 10.0), vFontSize, iTime, 3.0, 5.0));
-	fragColor = mix( vec4(1.0, 0.0, 0.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);*/
-	fragColor = crepuscular_rays(uv, pos.xy);
+	vColour = mix( vColour, vec4(1.0, 1.0, 0.0, 0.0), PrintValue(fragCoord, vec2(10.0, 10.0), vFontSize, sin(iTime*16.0 + iStart) + iExposure - 1.0, 3.0, 2.0));
+	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(350.0, 10.0), vFontSize, iTime, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(770.0, 10.0), vFontSize, iStart, 2.0, 2.0));
+	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);/**/
+	//fragColor = crepuscular_rays(uv, pos.xy);
 }
