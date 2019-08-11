@@ -4,9 +4,13 @@ uniform float     	iTime; 					// shader playback time (in seconds)
 uniform float     	iElapsed; 				// shader playback time delta (in seconds)
 uniform float     	iExposure; 				// exposure
 uniform float     	iStart;					// start adjustment
+uniform float     	iBpm;
+uniform float     	iBarDuration;
 uniform vec4      	iMouse; 				// mouse pixel coords. xy: current (if MLB down), zw: click
 uniform sampler2D 	iChannel0; 				// input channel 0
 // https://www.shadertoy.com/view/4sf3RN
+
+float PI = 3.14159265358979586;
 
 // Number Printing - @P_Malin
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -42,7 +46,8 @@ vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
         vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
 
         sampl *= illuminationDecay * weight;
-        color += sampl * (sin(iTime*16.0 + iStart) + iExposure - 1.0);
+        //color += sampl * (sin(iTime*16.0 + iStart) + iExposure - 1.0);
+        color += sampl * (sin( iTime / 60.0 * iBpm * 2.0 * PI + iStart) + iExposure - 1.0);
         //color += sampl* (sin(iTime) + 1.0);
         illuminationDecay *= decay;
     }
@@ -195,8 +200,10 @@ void main( void ){
     vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);
 	vec4 vColour = vec4(0.7);
 	vColour = mix( vColour, vec4(1.0, 1.0, 0.0, 0.0), PrintValue(fragCoord, vec2(10.0, 10.0), vFontSize, sin(iTime*16.0 + iStart) + iExposure - 1.0, 3.0, 2.0));
-	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(350.0, 10.0), vFontSize, iTime, 2.0, 2.0));
-    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(770.0, 10.0), vFontSize, iStart, 2.0, 2.0));
+	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(250.0, 10.0), vFontSize, iTime, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(470.0, 10.0), vFontSize, iStart, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(670.0, 10.0), vFontSize, iBarDuration, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(970.0, 10.0), vFontSize, iBpm, 2.0, 2.0));
 	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);/**/
 	//fragColor = crepuscular_rays(uv, pos.xy);
 }

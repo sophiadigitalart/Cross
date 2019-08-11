@@ -180,6 +180,8 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
 	mGlsl->uniform("iStart", mVDSettings->iStart);
+	mGlsl->uniform("iBarDuration", mVDSettings->iBarDuration);
+	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
 	mGlsl->uniform("iElapsed", mVDSession->getFloatUniformValueByIndex(mVDSettings->IELAPSED));
 	mGlsl->uniform("iExposure", mVDSession->getFloatUniformValueByIndex(mVDSettings->IEXPOSURE));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
