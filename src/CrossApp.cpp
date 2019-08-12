@@ -75,6 +75,7 @@ private:
 	Area							mSrcArea;
 	int								mLastBar = 0;
 	int								mSeqIndex = 1;
+	float							mPreviousStart = 0.0f;
 };
 
 
@@ -176,7 +177,7 @@ void CrossApp::renderToFbo()
 	mImage->bind(0);
 	gl::ScopedGlslProg prog(mGlsl);
 
-	mGlsl->uniform("iTime", mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME));;
+	mGlsl->uniform("iTime", mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME) - mVDSettings->iStart);;
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
 	mGlsl->uniform("iStart", mVDSettings->iStart);
@@ -193,12 +194,14 @@ void CrossApp::update()
 
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IFPS, getAverageFps());
 	mVDSession->update();
-	
+	//mVDSettings->iStart = 0.26;
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
+		//if (mLastBar < 3) mPreviousStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 		//CI_LOG_V("getPosition " + toString(mVDSession->getPosition(mSeqIndex)) +" getMaxFrame " + toString(mVDSession->getMaxFrame(mSeqIndex)));
 		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IELAPSED, 0.0f);
-
+		mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
+		//mPreviousStart = mVDSettings->iStart;
 		if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
 			// 20190808 
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
