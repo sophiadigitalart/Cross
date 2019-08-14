@@ -1,11 +1,12 @@
 
 uniform vec3      	iResolution; 			// viewport resolution (in pixels)
 uniform float     	iTime; 					// shader playback time (in seconds)
-uniform float     	iElapsed; 				// shader playback time delta (in seconds)
+uniform float     	iBarBeat; 				// 
 uniform float     	iExposure; 				// exposure
-uniform float     	iStart;					// start adjustment
+uniform float     	iBeat;					// start adjustment
 uniform float     	iBpm;
-uniform float     	iBarDuration;
+uniform float     	iBar;
+uniform float     	iTimeFactor;
 uniform vec4      	iMouse; 				// mouse pixel coords. xy: current (if MLB down), zw: click
 uniform sampler2D 	iChannel0; 				// input channel 0
 // https://www.shadertoy.com/view/4sf3RN
@@ -24,37 +25,7 @@ vec2  fragCoord = gl_FragCoord.xy; // keep the 2 spaces between vec2 and fragCoo
 
 // https://www.shadertoy.com/view/ls2Xzd
 // Algorithm found in https://medium.com/community-play-3d/god-rays-whats-that-5a67f26aeac2
-vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
 
-    float decay = 0.98;
-    float density = 1.0;
-    float weight = 0.58767;
-    // NUM_SAMPLES will describe the rays quality, you can play with
-    const int nsamples = 150;
-
-    vec2 tc = texCoords.xy;
-    vec2 deltaTexCoord = tc - pos.xy; //* sin(iTime)
-    deltaTexCoord *= (1.0 / float(nsamples) * density);
-    float illuminationDecay = 1.0;
-
-    vec4 color = texture(iChannel0, tc.xy) * vec4(0.9);
-	
-    tc += deltaTexCoord * fract( sin(dot(texCoords.xy+fract(iTime), vec2(12.9898, 78.233)))* 43758.5453 );
-    for (int i = 0; i < nsamples; i++)
-	{
-        tc -= deltaTexCoord;
-        vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
-
-        sampl *= illuminationDecay * weight;
-        //color += sampl * (sin(iTime*16.0 + iStart) + iExposure - 1.0);
-        // 20190812 color += sampl * (sin( iTime / 60.0 * iBpm * 2.0 * PI + iStart) + iExposure - 1.0);
-        color += sampl * (sin( iTime / 60.0 * iBpm * 0.125 * PI ) + iExposure - 1.0);
-        //color += sampl* (sin(iTime) + 1.0);
-        illuminationDecay *= decay;
-    }
-    
-    return color;
-}
 float SampleDigit(const in float fDigit, const in vec2 vUV)
 {       
     if(vUV.x < 0.0) return 0.0;
@@ -182,7 +153,40 @@ float PrintValue(in vec2 inFragCoord, const in vec2 vPixelCoords, const in vec2 
 {
     return PrintValue((inFragCoord.xy - vPixelCoords) / vFontSize, fValue, fMaxDigits, fDecimalPlaces);
 }
+vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
 
+    float decay = 0.98;
+    float density = 1.0;
+    float weight = 0.58767;
+    // NUM_SAMPLES will describe the rays quality, you can play with
+    const int nsamples = 150;
+
+    vec2 tc = texCoords.xy;
+    vec2 deltaTexCoord = tc - pos.xy; //* sin(iTime)
+    deltaTexCoord *= (1.0 / float(nsamples) * density);
+    float illuminationDecay = 1.0;
+
+    vec4 color = texture(iChannel0, tc.xy) * vec4(0.9);
+	
+    tc += deltaTexCoord * fract( sin(dot(texCoords.xy+fract(iTime), vec2(12.9898, 78.233)))* 43758.5453 );
+    for (int i = 0; i < nsamples; i++)
+	{
+        tc -= deltaTexCoord;
+        vec4 sampl = texture(iChannel0, tc.xy) * vec4(0.2); 
+
+        sampl *= illuminationDecay * weight;
+
+		if (iTimeFactor < 2.0) {
+			color += sampl * (sin( iTime / 30.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0);
+		} else {
+			// ok with iExposure=1.8
+			color += sampl * (sin( iTime / 30.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0);
+		}
+        illuminationDecay *= decay;
+    }
+    
+    return color;
+}
 void main( void ){
 	vec2 uv = fragCoord.xy / iResolution.xy;
 	//uv.x *= iResolution.x/iResolution.y; //fix aspect ratio
@@ -192,7 +196,7 @@ void main( void ){
 	//vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(0.3, 0.530),iMouse.z-.5);
 	//if (iMouse.z>.5)
 	//{
-		vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(iMouse.x, iMouse.y),iMouse.z-.5);
+	vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(iMouse.x, iMouse.y),iMouse.z-.5);
 		//pos.x=sin(iTime*.09)*.95;
 		//pos.y=sin(iTime*.09)*.95;
 	//}
@@ -200,11 +204,14 @@ void main( void ){
 	   // Multiples of 4x5 work best
     vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);
 	vec4 vColour = vec4(0.7);
-	vColour = mix( vColour, vec4(1.0, 1.0, 0.0, 0.0), PrintValue(fragCoord, vec2(10.0, 10.0), vFontSize, sin(iTime*16.0 + iStart) + iExposure - 1.0, 3.0, 2.0));
-	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(250.0, 10.0), vFontSize, iTime, 2.0, 2.0));
-    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(470.0, 10.0), vFontSize, iStart, 2.0, 2.0));
-    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(670.0, 10.0), vFontSize, iBarDuration, 2.0, 2.0));
+	vColour = mix( vColour, vec4(1.0, 1.0, 0.0, 0.0), PrintValue(fragCoord, vec2(0.0, 10.0), vFontSize, sin( iTime / 60.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0, 3.0, 2.0));
+	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(150.0, 10.0), vFontSize, iTime, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(250.0, 10.0), vFontSize, iBeat, 2.0, 0.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(350.0, 10.0), vFontSize, iBar, 2.0, 0.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(450.0, 10.0), vFontSize, iBarBeat, 2.0, 0.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(550.0, 10.0), vFontSize, iExposure, 2.0, 2.0));
+    vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(750.0, 10.0), vFontSize, iTimeFactor, 2.0, 3.0));
     vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(970.0, 10.0), vFontSize, iBpm, 2.0, 2.0));
-	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);/**/
-	//fragColor = crepuscular_rays(uv, pos.xy);
+	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);
+	/*fragColor = crepuscular_rays(uv, pos.xy);*/
 }

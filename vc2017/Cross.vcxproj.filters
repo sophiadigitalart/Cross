@@ -406,5 +406,8 @@
     <Xml Include="build\Win32\Release\VDCross.xml">
       <Filter>release</Filter>
     </Xml>
+    <Xml Include="..\assets\warps.xml">
+      <Filter>assets</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

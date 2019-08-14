@@ -212,6 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\assets\textures.xml" />
+    <Xml Include="..\assets\warps.xml" />
     <Xml Include="build\Win32\Debug\VDCross.xml" />
     <Xml Include="build\Win32\Release\VDCross.xml" />
   </ItemGroup>

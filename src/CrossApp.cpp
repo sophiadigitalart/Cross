@@ -129,8 +129,9 @@ CrossApp::CrossApp()
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
 	mVDSession->setBpm(160.0f);
 	mVDSession->setSpeed(mSeqIndex, 0.0f);
-	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710);
-	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648);
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710f);
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648f);
+	setWindowPos(10, 10);
 }
 void CrossApp::resizeWindow()
 {
@@ -180,10 +181,11 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iTime", mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME) - mVDSettings->iStart);;
 	mGlsl->uniform("iResolution", vec3(1280.0f, 720.0f, 1.0)); //vec3(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, 1.0));
 	mGlsl->uniform("iChannel0", 0); // texture 0
-	mGlsl->uniform("iStart", mVDSettings->iStart);
-	mGlsl->uniform("iBarDuration", mVDSettings->iBarDuration);
+	mGlsl->uniform("iBeat", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBEAT));
+	mGlsl->uniform("iBar", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR));
+	mGlsl->uniform("iTimeFactor", mVDSettings->iTimeFactor);
 	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
-	mGlsl->uniform("iElapsed", mVDSession->getFloatUniformValueByIndex(mVDSettings->IELAPSED));
+	mGlsl->uniform("iBarBeat", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT));
 	mGlsl->uniform("iExposure", mVDSession->getFloatUniformValueByIndex(mVDSettings->IEXPOSURE));
 	mGlsl->uniform("iMouse", vec4(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ), mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEZ)));
 	//CI_LOG_V("iMouse x " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEX)) +" y " + toString(mVDSession->getFloatUniformValueByIndex(mVDSettings->IMOUSEY)));
@@ -191,27 +193,46 @@ void CrossApp::renderToFbo()
 }
 void CrossApp::update()
 {
-
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IFPS, getAverageFps());
 	mVDSession->update();
-	//mVDSettings->iStart = 0.26;
+	
+	// OK 1 bar mVDSession->setTimeFactor(3);
+	// OK 2 bars mVDSession->setTimeFactor(2);
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
-		//if (mLastBar < 3) mPreviousStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
-		//CI_LOG_V("getPosition " + toString(mVDSession->getPosition(mSeqIndex)) +" getMaxFrame " + toString(mVDSession->getMaxFrame(mSeqIndex)));
-		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IELAPSED, 0.0f);
-		mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
-		//mPreviousStart = mVDSettings->iStart;
-		if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
-			// 20190808 
+		if (mLastBar != 5 && mLastBar != 9) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
+		if (mLastBar < 4) {
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
+			mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+		}
+		else if (mLastBar < 6) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.8f);			
 		}
-		else {
-			// 20190808 
-			mVDSession->incrementSequencePosition();
+		else if (mLastBar < 7) {
+			mVDSession->setPlayheadPosition(mSeqIndex, 1);
+			mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		}
-
-
+		else if (mLastBar < 8) {
+			mVDSession->setPlayheadPosition(mSeqIndex, 2);
+		}
+		else if (mLastBar < 10) {
+			mVDSession->setPlayheadPosition(mSeqIndex, 3);
+			mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+		}
+		else if (mLastBar == 10) {
+			mVDSession->setPlayheadPosition(mSeqIndex, 4);
+			mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
+		}
+		else
+		{
+			if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
+				mVDSession->setPlayheadPosition(mSeqIndex, 0);
+			}
+			else {
+				mVDSession->incrementSequencePosition();
+			}
+		}
 	}
 	mImage = mVDSession->getInputTexture(mSeqIndex);
 	mSrcArea = mImage->getBounds();
@@ -239,7 +260,7 @@ void CrossApp::mouseMove(MouseEvent event)
 {
 	if (!Warp::handleMouseMove(mWarps, event)) {
 		if (!mVDSession->handleMouseMove(event)) {
-			
+
 		}
 	}
 }
@@ -257,7 +278,7 @@ void CrossApp::mouseDrag(MouseEvent event)
 		if (!mVDSession->handleMouseDrag(event)) {
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, (float)event.getPos().x / (float)mVDSettings->mRenderWidth);
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, (float)event.getPos().y / (float)mVDSettings->mRenderHeight);
-			
+
 		}
 	}
 }
@@ -332,7 +353,7 @@ void CrossApp::draw()
 		}
 	}
 
-	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), false); 
+	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), false);
 	if (mImage) {
 		for (auto &warp : mWarps) {
 			if (mUseShader) {
@@ -340,7 +361,7 @@ void CrossApp::draw()
 			}
 			else {
 				warp->draw(mImage, mSrcArea);
-			}			
+			}
 		}
 	}
 
