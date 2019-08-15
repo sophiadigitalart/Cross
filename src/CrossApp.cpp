@@ -195,34 +195,44 @@ void CrossApp::update()
 {
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IFPS, getAverageFps());
 	mVDSession->update();
-	
+
 	// OK 1 bar mVDSession->setTimeFactor(3);
 	// OK 2 bars mVDSession->setTimeFactor(2);
+	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT); 
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		if (mLastBar != 5 && mLastBar != 9) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 		if (mLastBar < 4) {
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
-			mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+			//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+			mVDSettings->iTimeFactor = 0.18; // 5 22
 		}
 		else if (mLastBar < 6) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
-			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.8f);			
+			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
+	if (current == 22) {
+		mVDSession->setPlayheadPosition(mSeqIndex, 7);
+	}		
 		}
 		else if (mLastBar < 7) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 1);
-			mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
+
+			//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
+			mVDSettings->iTimeFactor = 0.25;
+
 		}
 		else if (mLastBar < 8) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 2);
 		}
 		else if (mLastBar < 10) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 3);
-			mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+			//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+			mVDSettings->iTimeFactor = 0.18;
 		}
 		else if (mLastBar == 10) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 4);
-			mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
+			//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
+			mVDSettings->iTimeFactor = 0.25;
 		}
 		else
 		{

@@ -176,12 +176,8 @@ vec4 crepuscular_rays(vec2 texCoords, vec2 pos) {
 
         sampl *= illuminationDecay * weight;
 
-		if (iTimeFactor < 2.0) {
-			color += sampl * (sin( iTime / 30.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0);
-		} else {
-			// ok with iExposure=1.8
-			color += sampl * (sin( iTime / 30.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0);
-		}
+		// ok with iExposure= 1.93 iTime/45.0
+		color += sampl * (sin( iTime / 45.0 * iBpm * iTimeFactor * 2 * PI ) + iExposure - 1.0);
         illuminationDecay *= decay;
     }
     
