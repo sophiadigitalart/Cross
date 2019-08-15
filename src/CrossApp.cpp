@@ -198,7 +198,11 @@ void CrossApp::update()
 
 	// OK 1 bar mVDSession->setTimeFactor(3);
 	// OK 2 bars mVDSession->setTimeFactor(2);
+	// IBARBEAT = IBAR * 4 + IBEAT
 	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT); 
+	if (current == 22) {
+		mVDSession->setPlayheadPosition(mSeqIndex, 7);
+	}		
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		if (mLastBar != 5 && mLastBar != 9) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
@@ -210,9 +214,6 @@ void CrossApp::update()
 		else if (mLastBar < 6) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 0);
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
-	if (current == 22) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 7);
-	}		
 		}
 		else if (mLastBar < 7) {
 			mVDSession->setPlayheadPosition(mSeqIndex, 1);
