@@ -197,8 +197,8 @@ void main( void ){
 		//pos.y=sin(iTime*.09)*.95;
 	//}
 	pos.x *= iResolution.x/iResolution.y; //fix aspect ratio
-	   // Multiples of 4x5 work best
-    vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);
+	// Multiples of 4x5 work best
+    /*vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);
 	vec4 vColour = vec4(0.7);
 	vColour = mix( vColour, vec4(1.0, 1.0, 0.0, 0.0), PrintValue(fragCoord, vec2(0.0, 10.0), vFontSize, sin( iTime / 60.0 * iBpm * iTimeFactor * PI ) + iExposure - 1.0, 3.0, 2.0));
 	vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(150.0, 10.0), vFontSize, iTime, 2.0, 2.0));
@@ -208,6 +208,6 @@ void main( void ){
     vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(550.0, 10.0), vFontSize, iExposure, 2.0, 2.0));
     vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(750.0, 10.0), vFontSize, iTimeFactor, 2.0, 3.0));
     vColour = mix( vColour, vec4(0.7, 0.0, 0.5, 0.0), PrintValue(fragCoord, vec2(970.0, 10.0), vFontSize, iBpm, 2.0, 2.0));
-	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);
-	/*fragColor = crepuscular_rays(uv, pos.xy);*/
+	fragColor = mix( vec4(1.0, 1.0, 1.0, 0.0), crepuscular_rays(uv, pos.xy), vColour);*/
+	fragColor = crepuscular_rays(uv, pos.xy);
 }
