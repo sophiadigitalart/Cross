@@ -125,7 +125,7 @@ CrossApp::CrossApp()
 	//format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
 	mFbo = gl::Fbo::create(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, format.depthTexture());
 	// shader
-	mUseShader = true;
+	mUseShader = false;// TODO PUT BACK true;
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
 	mVDSession->setBpm(160.0f);
 	mVDSession->setSpeed(mSeqIndex, 0.0f);
@@ -200,7 +200,7 @@ void CrossApp::update()
 	// OK 1 bar mVDSession->setTimeFactor(3);
 	// OK 2 bars mVDSession->setTimeFactor(2);
 	// IBARBEAT = IBAR * 4 + IBEAT
-	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +102; 408
+	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +404
 	/*switch (current)
 	{
 	case 52:
@@ -350,39 +350,39 @@ void CrossApp::update()
 	default:
 		break;
 	}*/
-	//current -= 102; 408
-		// was commented in if (current < 16) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
-	if (current < 424) {//16
+	//current -= 102; 1=408 +404
+		// was commented in if (current < 420) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+	if (current < 420) {//16
 		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
 		mVDSettings->iTimeFactor = 0.18; // 5 22
 	}
-	else if (current < 430) {//22
+	else if (current < 426) {//22
 		//mVDSession->setPlayheadPosition(mSeqIndex, 0);
 		mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
 	}
-	else if (current < 432) {//24 430
-		if (current == 430) mLastBar = 0; //22 to set iStart
+	else if (current < 428) {//24 430
+		if (current == 426) mLastBar = 0; //22 to set iStart
 		//mVDSession->setPlayheadPosition(mSeqIndex, 1);
 	}
-	else if (current < 436) {//28 432
+	else if (current < 432) {//28 432
 		//mVDSession->setPlayheadPosition(mSeqIndex, 2);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
 	}
-	else if (current < 440) {//32 436
+	else if (current < 436) {//32 436
 		//mVDSession->setPlayheadPosition(mSeqIndex, 3);
 	}
-	else if (current < 446) {//38 440
+	else if (current < 442) {//38 440
 		//mVDSession->setPlayheadPosition(mSeqIndex, 4);
 		//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
 		mVDSettings->iTimeFactor = 0.18;
 	}
-	else if (current < 448) {//40 
-		if (current == 446) mLastBar = 0; //38 to set iStart
+	else if (current < 444) {//40 
+		if (current == 442) mLastBar = 0; //38 to set iStart
 		//mVDSession->setPlayheadPosition(mSeqIndex, 5);
 		mVDSettings->iTimeFactor = 0.18;
 	}
-	else if (current == 448) {//40
+	else if (current == 444) {//40
 		//mVDSession->setPlayheadPosition(mSeqIndex, 6);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
