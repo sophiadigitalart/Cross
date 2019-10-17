@@ -13,9 +13,9 @@
 					<luminance red="0.5" green="0.5" blue="0.5"/>
 				</blend>
 				<corner x="0" y="0"/>
-				<corner x="2.00156" y="-0.00208333"/>
-				<corner x="1.99844" y="1.48542"/>
-				<corner x="-0.0234375" y="1.52083"/>
+				<corner x="2" y="0"/>
+				<corner x="2" y="1.5"/>
+				<corner x="0" y="1.5"/>
 			</warp>
 		</map>
 	</profile>

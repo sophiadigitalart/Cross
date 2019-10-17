@@ -110,7 +110,7 @@ CrossApp::CrossApp()
 	}
 	// load test image .loadTopDown()
 	try {
-		mImage = gl::Texture::create(loadImage(loadAsset("c.jpg")), gl::Texture2d::Format().mipmap(true).minFilter(GL_LINEAR_MIPMAP_LINEAR));
+		mImage = gl::Texture::create(loadImage(loadAsset("0.jpg")), gl::Texture2d::Format().mipmap(true).minFilter(GL_LINEAR_MIPMAP_LINEAR));
 
 		mSrcArea = mImage->getBounds();
 
@@ -184,6 +184,7 @@ void CrossApp::renderToFbo()
 	mGlsl->uniform("iBeat", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBEAT));
 	mGlsl->uniform("iBar", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR));
 	mGlsl->uniform("iTimeFactor", mVDSettings->iTimeFactor);
+	mGlsl->uniform("iDebug", (int)mVDSettings->iDebug);
 	mGlsl->uniform("iBpm", mVDSession->getFloatUniformValueByIndex(mVDSettings->IBPM));
 	mGlsl->uniform("iBarBeat", (float)mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT));
 	mGlsl->uniform("iExposure", mVDSession->getFloatUniformValueByIndex(mVDSettings->IEXPOSURE));
@@ -199,8 +200,8 @@ void CrossApp::update()
 	// OK 1 bar mVDSession->setTimeFactor(3);
 	// OK 2 bars mVDSession->setTimeFactor(2);
 	// IBARBEAT = IBAR * 4 + IBEAT
-	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);
-	switch (current)
+	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +102; 408
+	/*switch (current)
 	{
 	case 52:
 	case 53:
@@ -333,7 +334,7 @@ void CrossApp::update()
 		mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 		mVDSession->setPlayheadPosition(mSeqIndex, 39);
 		mVDSettings->iTimeFactor = 0.18;
-		break;	
+		break;
 	case 115:
 	case 116:
 	case 117:
@@ -345,49 +346,51 @@ void CrossApp::update()
 		break;
 	case 122:
 		mUseShader = false;
-		break;	
+		break;
 	default:
 		break;
-	}
-	if (current < 16) {
-		mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
-		//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+	}*/
+	//current -= 102; 408
+		// was commented in if (current < 16) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
+	if (current < 424) {//16
+		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
 		mVDSettings->iTimeFactor = 0.18; // 5 22
 	}
-	else if (current < 22) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 0);
+	else if (current < 430) {//22
+		//mVDSession->setPlayheadPosition(mSeqIndex, 0);
 		mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
 	}
-	else if (current < 24) {
-		if (current == 22) mLastBar = 0; // to set iStart
-		mVDSession->setPlayheadPosition(mSeqIndex, 1);
+	else if (current < 432) {//24 430
+		if (current == 430) mLastBar = 0; //22 to set iStart
+		//mVDSession->setPlayheadPosition(mSeqIndex, 1);
 	}
-	else if (current < 28) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 2);
+	else if (current < 436) {//28 432
+		//mVDSession->setPlayheadPosition(mSeqIndex, 2);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
 	}
-	else if (current < 32) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 3);
+	else if (current < 440) {//32 436
+		//mVDSession->setPlayheadPosition(mSeqIndex, 3);
 	}
-	else if (current < 38) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 4);
+	else if (current < 446) {//38 440
+		//mVDSession->setPlayheadPosition(mSeqIndex, 4);
 		//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
 		mVDSettings->iTimeFactor = 0.18;
 	}
-	else if (current < 40) {
-		if (current == 38) mLastBar = 0; // to set iStart
-		mVDSession->setPlayheadPosition(mSeqIndex, 5);
+	else if (current < 448) {//40 
+		if (current == 446) mLastBar = 0; //38 to set iStart
+		//mVDSession->setPlayheadPosition(mSeqIndex, 5);
 		mVDSettings->iTimeFactor = 0.18;
 	}
-	else if (current == 40) {
-		mVDSession->setPlayheadPosition(mSeqIndex, 6);
+	else if (current == 448) {//40
+		//mVDSession->setPlayheadPosition(mSeqIndex, 6);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
 	}
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
-		if (mLastBar != 5 && mLastBar != 9 && mLastBar < 113) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
+		//if (mLastBar != 5 && mLastBar != 9 && mLastBar < 113) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
+		if (mLastBar != 107 && mLastBar != 111 && mLastBar < 205) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 
 		/*if (mLastBar > 9 && mLastBar < 50) {
 			if (mVDSession->getPosition(mSeqIndex) > mVDSession->getMaxFrame(mSeqIndex) - 2) {
@@ -398,11 +401,18 @@ void CrossApp::update()
 			}
 		} */
 	}
-	mImage = mVDSession->getInputTexture(mSeqIndex);
-	mSrcArea = mImage->getBounds();
+	//mImage = mVDSession->getInputTexture(mSeqIndex);
+	mImage = mVDSession->getCachedTexture(mSeqIndex, "a (" + toString(current) + ").jpg");
+	if (!mImage) {
+		CI_LOG_E("image not loaded");
+		mImage = gl::Texture::create(loadImage(loadAsset("0.jpg")), gl::Texture2d::Format().mipmap(true).minFilter(GL_LINEAR_MIPMAP_LINEAR));
+	}
 	if (mUseShader) {
 		renderToFbo();
 	}
+	// adjust the content size of the warps
+	mSrcArea = mImage->getBounds();
+
 	// adjust the content size of the warps
 	Warp::setSize(mWarps, mImage->getSize());
 }
@@ -482,18 +492,6 @@ void CrossApp::keyDown(KeyEvent event)
 				// toggle warp edit mode
 				Warp::enableEditMode(!Warp::isEditModeEnabled());
 				break;
-			case KeyEvent::KEY_a:
-				// toggle drawing a random region of the image
-				if (mSrcArea.getWidth() != mImage->getWidth() || mSrcArea.getHeight() != mImage->getHeight())
-					mSrcArea = mImage->getBounds();
-				else {
-					int x1 = Rand::randInt(0, mImage->getWidth() - 150);
-					int y1 = Rand::randInt(0, mImage->getHeight() - 150);
-					int x2 = Rand::randInt(x1 + 150, mImage->getWidth());
-					int y2 = Rand::randInt(y1 + 150, mImage->getHeight());
-					mSrcArea = Area(x1, y1, x2, y2);
-				}
-				break;
 			}
 		}
 	}
@@ -530,13 +528,13 @@ void CrossApp::draw()
 	}
 
 	// Spout Send
-	//mSpoutOut.sendViewport();
-	mSpoutOut.sendTexture(mFbo->getColorTexture());
+	mSpoutOut.sendViewport();
+	//mSpoutOut.sendTexture(mFbo->getColorTexture());
 	if (mVDSession->showUI()) {
 		mVDUI->Run("UI", (int)getAverageFps());
 		if (mVDUI->isReady()) {
 		}
-		getWindow()->setTitle(mVDSettings->sFps + " fps Cross");
+		getWindow()->setTitle(mVDSettings->sFps + " fps SOS");
 	}
 }
 
