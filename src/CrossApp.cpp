@@ -125,7 +125,7 @@ CrossApp::CrossApp()
 	//format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
 	mFbo = gl::Fbo::create(mVDSettings->mRenderWidth, mVDSettings->mRenderHeight, format.depthTexture());
 	// shader
-	mUseShader = false;// TODO PUT BACK true;
+	mUseShader = false;
 	mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("passthrough.vs")).fragment(loadAsset("crosslightz.glsl")));
 	mVDSession->setBpm(160.0f);
 	mVDSession->setSpeed(mSeqIndex, 0.0f);
@@ -350,9 +350,15 @@ void CrossApp::update()
 	default:
 		break;
 	}*/
+	// was commented in if (current < 420) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
 	//current -= 102; 1=408 +404
-		// was commented in if (current < 420) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
-	if (current < 420) {//16
+	if (current < 68) {
+		mUseShader = false;
+	}
+	else if (current < 132) {
+		mUseShader = true;
+	}
+	else if (current < 420) {//16
 		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
 		mVDSettings->iTimeFactor = 0.18; // 5 22
 	}
