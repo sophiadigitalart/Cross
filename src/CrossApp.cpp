@@ -209,118 +209,6 @@ void CrossApp::update()
 		mVDSettings->iTimeFactor = 0.35;
 		mUseShader = true;
 		break;
-	case 54:
-	case 55:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 56:
-	case 57:
-		mVDSession->setPlayheadPosition(mSeqIndex, 10);
-		break;
-	case 58:
-	case 59:
-		mVDSession->setPlayheadPosition(mSeqIndex, 11);
-		break;
-	case 60:
-	case 61:
-		mVDSession->setPlayheadPosition(mSeqIndex, 12);
-		break;
-	case 62:
-	case 63:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 64:
-	case 65:
-		mVDSession->setPlayheadPosition(mSeqIndex, 14);
-		break;
-	case 66:
-	case 67:
-		mVDSession->setPlayheadPosition(mSeqIndex, 15);
-		break;
-	case 68:
-	case 69:
-		mVDSession->setPlayheadPosition(mSeqIndex, 16);
-		break;
-	case 70:
-	case 71:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 72:
-	case 73:
-		mVDSession->setPlayheadPosition(mSeqIndex, 18);
-		break;
-	case 74:
-	case 75:
-		mVDSession->setPlayheadPosition(mSeqIndex, 19);
-		break;
-	case 76:
-	case 77:
-		mVDSession->setPlayheadPosition(mSeqIndex, 20);
-		break;
-	case 78:
-	case 79:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 80:
-	case 81:
-		mVDSession->setPlayheadPosition(mSeqIndex, 22);
-		break;
-	case 82:
-	case 83:
-		mVDSession->setPlayheadPosition(mSeqIndex, 23);
-		break;
-	case 84:
-	case 85:
-		mVDSession->setPlayheadPosition(mSeqIndex, 24);
-		break;
-	case 86:
-	case 87:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 88:
-	case 89:
-		mVDSession->setPlayheadPosition(mSeqIndex, 26);
-		break;
-	case 90:
-	case 91:
-		mVDSession->setPlayheadPosition(mSeqIndex, 27);
-		break;
-	case 92:
-	case 93:
-		mVDSession->setPlayheadPosition(mSeqIndex, 28);
-		break;
-	case 94:
-	case 95:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 96:
-	case 97:
-		mVDSession->setPlayheadPosition(mSeqIndex, 30);
-		break;
-	case 98:
-	case 99:
-		mVDSession->setPlayheadPosition(mSeqIndex, 31);
-		break;
-	case 100:
-	case 101:
-		mVDSession->setPlayheadPosition(mSeqIndex, 32);
-		break;
-	case 102:
-	case 103:
-		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
-		break;
-	case 104:
-	case 105:
-		mVDSession->setPlayheadPosition(mSeqIndex, 34);
-		break;
-	case 106:
-	case 107:
-		mVDSession->setPlayheadPosition(mSeqIndex, 35);
-		break;
-	case 108:
-	case 109:
-		mVDSession->setPlayheadPosition(mSeqIndex, 36);
-		break;
 	case 110:
 	case 111:
 		mVDSession->setPlayheadPosition(mSeqIndex, 9); // gtr
@@ -347,31 +235,47 @@ void CrossApp::update()
 	case 122:
 		mUseShader = false;
 		break;
-	default:
-		break;
 	}*/
 	// was commented in if (current < 420) mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
-	//current -= 102; 1=408 +404
+	//current 1=408 +404
+if (current < 388) {
+	
+	mVDSettings->iTimeFactor = 0.25;
+}
+else if (current < 420) {
+	mVDSettings->iTimeFactor = 0.18;
+}
 	if (current < 68) {
 		mUseShader = false;
+		mVDSettings->iTimeFactor = 0.25;
 	}
 	else if (current < 132) {
-		mUseShader = true;
+		//mUseShader = true;
+	}
+	else if (current < 196) {
+		mUseShader = false;
+	}
+	else if (current < 260) {
+		//mUseShader = true;
+	}
+	else if (current < 324) {
+		mUseShader = false;
+	}
+	else if (current < 388) {
+		//mUseShader = true;
 	}
 	else if (current < 420) {//16
+		mUseShader = false;
 		//mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 0.0f);
 		mVDSettings->iTimeFactor = 0.18; // 5 22
 	}
 	else if (current < 426) {//22
-		//mVDSession->setPlayheadPosition(mSeqIndex, 0);
 		mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
 	}
 	else if (current < 428) {//24 430
 		if (current == 426) mLastBar = 0; //22 to set iStart
-		//mVDSession->setPlayheadPosition(mSeqIndex, 1);
 	}
 	else if (current < 432) {//28 432
-		//mVDSession->setPlayheadPosition(mSeqIndex, 2);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
 	}
@@ -379,23 +283,28 @@ void CrossApp::update()
 		//mVDSession->setPlayheadPosition(mSeqIndex, 3);
 	}
 	else if (current < 442) {//38 440
-		//mVDSession->setPlayheadPosition(mSeqIndex, 4);
 		//mVDSession->setTimeFactor(2); // 0.125f duration = 2 bar
 		mVDSettings->iTimeFactor = 0.18;
 	}
 	else if (current < 444) {//40 
 		if (current == 442) mLastBar = 0; //38 to set iStart
-		//mVDSession->setPlayheadPosition(mSeqIndex, 5);
 		mVDSettings->iTimeFactor = 0.18;
 	}
 	else if (current == 444) {//40
-		//mVDSession->setPlayheadPosition(mSeqIndex, 6);
 		//mVDSession->setTimeFactor(3); // 0.25f duration = 1 bar
 		mVDSettings->iTimeFactor = 0.25;
+	}
+	else if (current < 452) {
+		mVDSettings->iTimeFactor = 1.0;
+	}
+	else if (current < 458) { // GOD DOG
+		mVDSettings->iTimeFactor = 0.18;
+		mUseShader = false;
 	}
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		//if (mLastBar != 5 && mLastBar != 9 && mLastBar < 113) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
+		// TODO CHECK
 		if (mLastBar != 107 && mLastBar != 111 && mLastBar < 205) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 
 		/*if (mLastBar > 9 && mLastBar < 50) {
