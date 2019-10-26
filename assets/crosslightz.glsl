@@ -191,12 +191,11 @@ void main( void ){
 	//vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(iMouse.x, iMouse.y),iMouse.z-.5);
 	//vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(0.32, 0.530),iMouse.z-.5);
 	//vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(0.3, 0.530),iMouse.z-.5);
-	//if (iMouse.z>.5)
-	//{
 	vec3 pos = vec3(iMouse.xy/iResolution.xy + vec2(iMouse.x, iMouse.y),iMouse.z-.5);
-		//pos.x=sin(iTime*.09)*.95;
-		//pos.y=sin(iTime*.09)*.95;
-	//}
+	if (iMouse.z>.5) {
+		pos.x=sin(iTime*.09)*.95;
+		pos.y=sin(iTime*.09)*.95;
+	}
 	pos.x *= iResolution.x/iResolution.y; //fix aspect ratio
 	// Multiples of 4x5 work best
     vec2 vFontSize = vec2(20.0, 40.0);//vec2(8.0, 15.0);

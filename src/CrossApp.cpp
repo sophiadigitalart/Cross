@@ -206,11 +206,11 @@ void CrossApp::update()
 		mVDSettings->iTimeFactor = 0.25;
 	}
 	else if (current < 426) {
-		 // 0.125f duration = 2 bar
+		// 0.125f duration = 2 bar
 		mVDSettings->iTimeFactor = 0.18;
 	}
 	else if (current < 428) {
-		  
+
 		mVDSettings->iTimeFactor = 1.0;
 	}
 	else if (current < 432) {//28 432
@@ -242,7 +242,7 @@ void CrossApp::update()
 	else if (current < 600) { // fin
 		mVDSettings->iTimeFactor = 0.10;
 	}
-	if ( current == 426 || current == 428 || current == 442) mLastBar = 0; //38 to set iStart
+	if (current == 426 || current == 428 || current == 442) mLastBar = 0; //38 to set iStart
 
 	// use shader
 	if (current < 68) {
@@ -257,7 +257,7 @@ void CrossApp::update()
 	else if (current < 260) {
 		mUseShader = true;
 	}
-	else if (current < 324) {
+	else if (current < 320) {
 		mUseShader = false;
 	}
 	else if (current < 388) {
@@ -278,7 +278,7 @@ void CrossApp::update()
 	else if (current < 1000) {
 		mUseShader = false;
 	}
-	
+
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		//if (mLastBar != 5 && mLastBar != 9 && mLastBar < 113) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
@@ -327,14 +327,15 @@ void CrossApp::mouseMove(MouseEvent event)
 }
 void CrossApp::mouseDown(MouseEvent event)
 {
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 1.0f);
 	if (!Warp::handleMouseDown(mWarps, event)) {
 		if (!mVDSession->handleMouseDown(event)) {
-			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 1.0f);
 		}
 	}
 }
 void CrossApp::mouseDrag(MouseEvent event)
 {
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 1.0f);
 	if (!Warp::handleMouseDrag(mWarps, event)) {
 		if (!mVDSession->handleMouseDrag(event)) {
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, (float)event.getPos().x / (float)mVDSettings->mRenderWidth);
@@ -345,11 +346,11 @@ void CrossApp::mouseDrag(MouseEvent event)
 }
 void CrossApp::mouseUp(MouseEvent event)
 {
-	if (!Warp::handleMouseUp(mWarps, event)) {
-		if (!mVDSession->handleMouseUp(event)) {
-			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 0.0f);
+	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEZ, 0.0f);
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710);
 			mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648);
+	if (!Warp::handleMouseUp(mWarps, event)) {
+		if (!mVDSession->handleMouseUp(event)) {
 		}
 	}
 }
@@ -422,7 +423,7 @@ void CrossApp::draw()
 		if (mVDUI->isReady()) {
 		}
 		getWindow()->setTitle(mVDSettings->sFps + " fps SOS");
-}
+	}
 }
 
 void prepareSettings(App::Settings *settings)
