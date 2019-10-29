@@ -76,6 +76,7 @@ private:
 	int								mLastBar = 0;
 	int								mSeqIndex = 1;
 	float							mPreviousStart = 0.0f;
+	int								current;
 };
 
 
@@ -133,6 +134,7 @@ CrossApp::CrossApp()
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648f);
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
 	setWindowPos(20, 20);
+	current = 4;
 }
 void CrossApp::resizeWindow()
 {
@@ -199,7 +201,7 @@ void CrossApp::update()
 	mVDSession->update();
 
 	// IBARBEAT = IBAR * 4 + IBEAT
-	int current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +404	
+	current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +404	
 	//current 1=408 +404
 	// time factor
 	if (current < 420) {
@@ -422,7 +424,7 @@ void CrossApp::draw()
 		mVDUI->Run("UI", (int)getAverageFps());
 		if (mVDUI->isReady()) {
 		}
-		getWindow()->setTitle(mVDSettings->sFps + " fps SOS");
+		getWindow()->setTitle(mVDSettings->sFps + " fps " + toString( current));
 	}
 }
 
