@@ -395,6 +395,9 @@
     <None Include="..\assets\crosslightz.glsl">
       <Filter>assets</Filter>
     </None>
+    <None Include="..\assets\crosslightz1.glsl">
+      <Filter>assets</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\assets\textures.xml">

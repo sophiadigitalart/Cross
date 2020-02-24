@@ -201,7 +201,7 @@ void CrossApp::update()
 	mVDSession->update();
 
 	// IBARBEAT = IBAR * 4 + IBEAT
-	current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// +404	
+	current = mVDSession->getIntUniformValueByIndex(mVDSettings->IBARBEAT);// TODO 20200224 WILL BE FLOAT +404	
 	//current 1=408 +404
 	// time factor
 	if (current < 420) {
@@ -362,7 +362,7 @@ void CrossApp::keyDown(KeyEvent event)
 	if (!Warp::handleKeyDown(mWarps, event)) {
 		if (!mVDSession->handleKeyDown(event)) {
 			switch (event.getCode()) {
-			case KeyEvent::KEY_ESCAPE:
+			case KeyEvent::KEY_F12:
 				// quit the application
 				quit();
 				break;
