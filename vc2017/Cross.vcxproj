@@ -206,14 +206,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\crosslightz.glsl" />
+    <None Include="..\assets\crosslightz1.glsl" />
     <None Include="..\assets\live_params.json" />
     <None Include="..\assets\session.json" />
     <None Include="..\assets\uniforms.json" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\assets\textures.xml" />
+    <Xml Include="..\assets\textures.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\assets\warps.xml" />
-    <Xml Include="build\Win32\Debug\VDCross.xml" />
+    <Xml Include="build\Win32\Debug\VDCross.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="build\Win32\Release\VDCross.xml" />
   </ItemGroup>
   <ItemGroup>

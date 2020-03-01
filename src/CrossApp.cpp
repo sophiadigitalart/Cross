@@ -133,6 +133,8 @@ CrossApp::CrossApp()
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEX, 0.27710f);
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IMOUSEY, 0.5648f);
 	mVDSession->setFloatUniformValueByIndex(mVDSettings->IEXPOSURE, 1.93f);
+	mVDSession->setIntUniformValueByIndex(mVDSettings->IOUTW, 2480);
+	mVDSession->setIntUniformValueByIndex(mVDSettings->IOUTH, 1052);
 	setWindowPos(20, 20);
 	current = 4;
 }
@@ -405,7 +407,7 @@ void CrossApp::draw()
 		}
 	}
 
-	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), false);
+	gl::setMatricesWindow(mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTW), mVDSession->getIntUniformValueByIndex(mVDSettings->IOUTH), true);
 	if (mImage) {
 		for (auto &warp : mWarps) {
 			if (mUseShader) {
