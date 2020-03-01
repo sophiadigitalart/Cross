@@ -1,4 +1,5 @@
 /*
+works fine, rewritten
 fixed light
 light transition to black between image changes
 */
@@ -246,7 +247,6 @@ void CrossApp::update()
 	else if (current < 600) { // fin
 		mVDSettings->iTimeFactor = 0.10;
 	}
-	if (current == 426 || current == 428 || current == 442) mLastBar = 0; //38 to set iStart
 
 	// use shader
 	if (current < 68) {
@@ -283,14 +283,13 @@ void CrossApp::update()
 		mUseShader = false;
 	}
 
+	if (current == 426 || current == 428 || current == 442) mLastBar = 0; //38 to set iStart
 	if (mLastBar != mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR)) {
 		mLastBar = mVDSession->getIntUniformValueByIndex(mVDSettings->IBAR);
 		//if (mLastBar != 5 && mLastBar != 9 && mLastBar < 113) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 		// TODO CHECK
 		//if (mLastBar != 107 && mLastBar != 111 && mLastBar < 205) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
 		if (mLastBar < 419 && mLastBar > 424) mVDSettings->iStart = mVDSession->getFloatUniformValueByIndex(mVDSettings->ITIME);
-
-
 	}
 	//mImage = mVDSession->getInputTexture(mSeqIndex);
 	mImage = mVDSession->getCachedTexture(mSeqIndex, "a (" + toString(current) + ").jpg");
