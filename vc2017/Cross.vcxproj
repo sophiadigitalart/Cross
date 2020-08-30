@@ -238,10 +238,8 @@
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-MIDI2\include\MidiOut.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-MIDI2\lib\RtError.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-MIDI2\lib\RtMidi.h" />
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\LiveParam.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDAnimation.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDFbo.h" />
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDLog.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDRouter.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDSession.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDSettings.h" />
@@ -249,7 +247,6 @@
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDTexture.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDUtils.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDWebsocket.h" />
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\Watchdog.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VDUI\include\VDUI.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VDUI\include\VDUIAnimation.h" />
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VDUI\include\VDUIAudio.h" />
@@ -281,10 +278,8 @@
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-MIDI2\src\MidiMessage.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-MIDI2\src\MidiOut.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-MIDI2\lib\RtMidi.cpp" />
-    <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\LiveParam.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDAnimation.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDFbo.cpp" />
-    <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDLog.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDRouter.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDSession.cpp" />
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDSettings.cpp" />

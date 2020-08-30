@@ -13,7 +13,7 @@ light transition to black between image changes
 // Session
 #include "VDSession.h"
 // Log
-#include "VDLog.h"
+//#include "VDLog.h"
 // Spout
 #include "CiSpoutOut.h"
 // warping
@@ -51,7 +51,7 @@ private:
 	// Session
 	VDSessionRef					mVDSession;
 	// Log
-	VDLogRef						mVDLog;
+	//VDLogRef						mVDLog;
 	// UI
 	VDUIRef							mVDUI;
 	// handle resizing for imgui
@@ -433,7 +433,7 @@ void prepareSettings(App::Settings *settings)
 {
 	settings->setWindowSize(1280, 720);
 #ifdef _DEBUG
-	//settings->setConsoleWindowEnabled();
+	settings->setConsoleWindowEnabled();
 #else
 	//settings->setConsoleWindowEnabled();
 #endif  // _DEBUG

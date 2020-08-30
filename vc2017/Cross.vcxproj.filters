@@ -179,16 +179,10 @@
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-MIDI2\lib\RtMidi.cpp">
       <Filter>Blocks\Midi2\lib</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\LiveParam.h">
-      <Filter>Blocks\Cinder-VD\include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDAnimation.h">
       <Filter>Blocks\Cinder-VD\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDFbo.h">
-      <Filter>Blocks\Cinder-VD\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDLog.h">
       <Filter>Blocks\Cinder-VD\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDRouter.h">
@@ -212,19 +206,10 @@
     <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\VDWebsocket.h">
       <Filter>Blocks\Cinder-VD\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Cinder\blocks\Cinder-VD\include\Watchdog.h">
-      <Filter>Blocks\Cinder-VD\include</Filter>
-    </ClInclude>
-    <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\LiveParam.cpp">
-      <Filter>Blocks\Cinder-VD\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDAnimation.cpp">
       <Filter>Blocks\Cinder-VD\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDFbo.cpp">
-      <Filter>Blocks\Cinder-VD\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDLog.cpp">
       <Filter>Blocks\Cinder-VD\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Cinder\blocks\Cinder-VD\src\VDRouter.cpp">
